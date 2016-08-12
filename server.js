@@ -11,8 +11,6 @@ var fbase = require('./firebase-server');
 
 var server = require('http').createServer(app);
 
-
-
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
@@ -24,7 +22,6 @@ router.get('/sample', function(req, res) {
     res.send('this is a sample!');  
 });
 
-
 // middleware to use for all requests
 router.use(function(req, res, next) {
     // do logging
@@ -33,10 +30,10 @@ router.use(function(req, res, next) {
 });
 
 
-
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-    res.send('Welcome to our api!');   
+    res.send('Welcome to our api!');
+    notifier.alertMormon("dBrnOzLqf4A:APA91bFI85OVZWuVQBifwAEUucsdXNWtKO9Nem-deSxnB6LDW4ywv5yLYOFWBcAh4ibyPaOQRacSjryWKNhIJYHYyHuhfnqFkXvtA7nRNF7Knb5gKSN6FX3elGypqdr0O1DbUpXJUsR1", "TEST", "TEST");
 });
 
 router.post('/', function (req, res) {
