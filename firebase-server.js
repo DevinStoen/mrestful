@@ -27,12 +27,15 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 	var mormon = snapshot.val();
 	// console.log(mormon);
 
+	//getting postal code and mormonId
 	var zip = mormon.zip;
 	console.log("zip: " + zip);
 
 	var mormonId = snapshot.key;
 	console.log("mormonId: " + mormonId);
 
+
+	// removing the pin after certain time frame
 	var mormonsRef = db.ref("postal_codes").child(zip).child("mormon_ids");
 
 	var obj = {};
@@ -42,6 +45,10 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 		console.log("after 5 sec, change mormonId to false");
 		mormonsRef.update(obj);
 	}, 5 * 1000);
+	
+	// TODO: send push notification to all the same zipcode device
+
+
 });
 
 
