@@ -1,4 +1,5 @@
 var firebase = require("firebase");
+var notifier = require('./notifier');
 
 // Initialize the app with a service account, granting admin privileges
 firebase.initializeApp({
@@ -19,10 +20,37 @@ firebase.initializeApp({
 
 // As an admin, the app has access to read and write all data, regardless of Security Rules
 var db = firebase.database();
-var ref = db.ref("postal_codes/92122/mormons");
-// Attach an asynchronous callback to read the data at our posts reference
-ref.on("value", function(snapshot) {
-  console.log(snapshot.val());
-}, function (errorObject) {
-  console.log("The read failed: " + errorObject.code);
+var ref = db.ref("mormons");
+
+// Retrieve new posts as they are added to our database
+ref.on("child_added", function(snapshot, prevChildKey) {
+	var mormon = snapshot.val();
+	// console.log(mormon);
+
+	//getting postal code and mormonId
+	var zip = mormon.zip;
+	console.log("zip: " + zip);
+
+	var mormonId = snapshot.key;
+	console.log("mormonId: " + mormonId);
+
+
+	// removing the pin after certain time frame
+	var mormonsRef = db.ref("postal_codes").child(zip).child("mormon_ids");
+
+	var obj = {};
+	obj[mormonId] = false;
+
+	setTimeout(function(){
+		console.log("after 5 sec, change mormonId to false");
+		mormonsRef.update(obj);
+	}, 5 * 1000);
+	
+	// TODO: send push notification to all the same zipcode device
+
+
 });
+
+
+	  
+
