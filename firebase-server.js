@@ -34,21 +34,41 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 	var mormonId = snapshot.key;
 	console.log("mormonId: " + mormonId);
 
-
 	// removing the pin after certain time frame
-	var mormonsRef = db.ref("postal_codes").child(zip).child("mormon_ids");
-
-	var obj = {};
-	obj[mormonId] = false;
+	var mormonIdRef = db.ref("postal_codes").child(zip).child("mormon_ids");
+	var mormonRef = ref.child(mormonId);
+	// var obj = {};
+	// obj[mormonId] = false;
 
 	setTimeout(function(){
-		console.log("after 5 sec, change mormonId to false");
-		mormonsRef.update(obj);
+		console.log("after 5 sec, remove the mormonId");
+		mormonIdRef.set(null);
+		mormonRef.set(null);
 	}, 5 * 1000);
-	
+
 	// TODO: send push notification to all the same zipcode device
+	var userIdRef = db.ref("postal_codes").child(zip).child("user_ids");
+	userIdRef.on("child_added", function(snapshot, prevChildKey) {
 
+		var userId = snapshot.key;
+		console.log("userId: " + userId);
 
+		var userRef = db.ref("users").child(userId);
+		userRef.on("value", function(snapshot) {
+
+			var user = snapshot.val();
+			var token = user.token;
+			console.log("token: " + token);
+
+			notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId);
+
+		}, function (errorObject) {
+			console.log("The read failed: " + errorObject.code);
+		});
+
+	}, function (errorObject) {
+		console.log("The read failed: " + errorObject.code);
+	});
 });
 
 
