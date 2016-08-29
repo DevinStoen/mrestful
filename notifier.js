@@ -6,7 +6,7 @@ var apiKey = 'AIzaSyAXR8YbJi7hNRdhG9xmGqngbrIepyzjfvA';
 
 var fcm = new FCM(apiKey);
 
-var alertMormon = function(tokenId, title, body, mormonId, latLng){
+var alertMormon = function(tokenId, title, body, mormonId){
 
     console.log('Try Sending Notification to \nToken: ' + tokenId);
 
@@ -14,8 +14,8 @@ var alertMormon = function(tokenId, title, body, mormonId, latLng){
         registration_id: tokenId,
         'data.title': title,
         'data.message': body,
-        'data.mormonId': mormonId,
-        'data.latLng': latLng
+        'data.mormonId': mormonId
+        // 'data.latLng': latLng
     };
 
     fcm.send(message, function(err, messageId){

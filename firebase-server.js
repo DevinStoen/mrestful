@@ -62,7 +62,7 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 			var token = user.token;
 			console.log("token: " + token);
 
-			notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId, latLng);
+			notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId);
 
 		}, function (errorObject) {
 			console.log("The read failed: " + errorObject.code);
