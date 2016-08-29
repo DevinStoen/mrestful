@@ -2,20 +2,21 @@ var FCM = require('fcm').FCM;
 // var FCM = require('fcm-node');
 // var FCM = require('fcm-push');
 
-var apiKey = 'AIzaSyAXR8YbJi7hNRdhG9xmGqngbrIepyzjfvA';
+var apiKey = 'AIzaSyA8QLgTbYj8ZTLk1ujQ-Q54eWZGYnDTX-c';
 
 var fcm = new FCM(apiKey);
 
 var alertMormon = function(tokenId, title, body, mormonId){
 
-    console.log('Try Sending Notification to \nToken: ' + tokenId);
+    // console.log('Try Sending Notification to \nToken: ' + tokenId);
 
     var message = {
         registration_id: tokenId,
         'data.title': title,
         'data.message': body,
         'data.mormonId': mormonId
-        // 'data.latLng': latLng
+        // 'data.lat': lat,
+        // 'data.lng': lng
     };
 
     fcm.send(message, function(err, messageId){
