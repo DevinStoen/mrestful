@@ -48,7 +48,7 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 		console.log("after 10 sec, remove the mormonId");
 		mormonIdRef.child(mormonId).set(null);
 		mormonRef.set(null);
-	}, 10 * 1000);
+	}, 15 * 60 * 1000);
 
 	// TODO: send push notification to all the same zipcode device
 	var userIdRef = db.ref("postal_codes").child(zip).child("user_ids");
