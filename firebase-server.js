@@ -29,7 +29,9 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 
 	//getting postal code and mormonId
 	var zip = mormon.zip;
+	var latLng = mormon.latLng;
 	console.log("zip: " + zip);
+	console.log("latLng: " + latLng);
 
 	var mormonId = snapshot.key;
 	console.log("mormonId: " + mormonId);
@@ -44,7 +46,7 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 		console.log("after 5 sec, remove the mormonId");
 		mormonIdRef.set(null);
 		mormonRef.set(null);
-	}, 5 * 1000);
+	}, 60 * 1000);
 
 	// TODO: send push notification to all the same zipcode device
 	var userIdRef = db.ref("postal_codes").child(zip).child("user_ids");
@@ -60,7 +62,7 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 			var token = user.token;
 			console.log("token: " + token);
 
-			notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId);
+			notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId, latLng);
 
 		}, function (errorObject) {
 			console.log("The read failed: " + errorObject.code);
