@@ -30,6 +30,8 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 
 	//getting postal code and mormonId
 	var zip = mormon.zip;
+
+	console.log("zip: " + zip);
 	// var lat = mormon.latLng.latitude;
 	// var lng = mormon.latLng.longitude;
 	// console.log("zip: " + zip);
@@ -48,34 +50,45 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 		console.log("after 10 sec, remove the mormonId");
 		mormonIdRef.child(mormonId).set(null);
 		mormonRef.set(null);
-	}, 15 * 60 * 1000);
+	}, 10 * 1000);
 
 	// TODO: send push notification to all the same zipcode device
 	var userIdRef = db.ref("postal_codes").child(zip).child("user_ids");
-	userIdRef.on("child_added", function(snapshot, prevChildKey) {
+	userIdRef.once("value", function(snapshot) {
 
-		console.log("UserId Loop");
+		// The callback function will get called twice, once for "fred" and once for "barney"
+		snapshot.forEach(function(childSnapshot) {
 
-		var userId = snapshot.key;
-		// console.log("userId: " + userId);
+			console.log("UserId Loop");
 
-		var userRef = db.ref("users").child(userId);
-		userRef.on("value", function(snapshot) {
+			var userId = childSnapshot.key;
 
-			var user = snapshot.val();
-			var token = user.token;
-			// console.log("token: " + token);
+			console.log("userId: " + userId);
 
-			notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId);
-			userRef.off();
+			if(userId != null){
+				var userRef = db.ref("users").child(userId);
+				userRef.once("value", function(snapshot) {
 
-		}, function (errorObject) {
-			console.log("The read failed: " + errorObject.code);
+					var user = snapshot.val();
+					if(user!= null){
+						var token = user.token;
+						// console.log("token: " + token);
+						if(token != null)
+							notifier.alertMormon(token, "Mormon Alert!!", "There are mormons close by", mormonId);
+						
+					}
+
+				}, function (errorObject) {
+					console.log("The read failed: " + errorObject.code);
+				});
+			}
 		});
 
 	}, function (errorObject) {
 		console.log("The read failed: " + errorObject.code);
 	});
+
+	// userIdRef.off();
 });
 
 
