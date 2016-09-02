@@ -88,7 +88,6 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 		console.log("The read failed: " + errorObject.code);
 	});
 
-	// userIdRef.off();
 });
 
 
