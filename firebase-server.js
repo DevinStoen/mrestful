@@ -28,9 +28,11 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 	// console.log(mormon);
 	console.log("Mormon Loop");
 
+	var creatorId = mormon.creatorId;
 	//getting postal code and mormonId
 	var zip = mormon.zip;
 
+	console.log("creatorId: "+ creatorId);
 	console.log("zip: " + zip);
 	// var lat = mormon.latLng.latitude;
 	// var lng = mormon.latLng.longitude;
@@ -65,7 +67,7 @@ ref.on("child_added", function(snapshot, prevChildKey) {
 
 			console.log("userId: " + userId);
 
-			if(userId != null){
+			if(userId != null && userId != creatorId){
 				var userRef = db.ref("users").child(userId);
 				userRef.once("value", function(snapshot) {
 

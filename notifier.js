@@ -24,6 +24,7 @@ var alertMormon = function(tokenId, title, body, mormonId){
             console.log("Something has gone wrong!" + err);
         } else {
             console.log("Sent with message ID: ", messageId);
+            console.log("Send to token: ", tokenId)
         }
         // console.log('after send');
     });
